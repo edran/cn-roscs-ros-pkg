@@ -1,0 +1,22 @@
+<package>
+  <description brief="roscs">
+
+     roscs - Build CSharp
+
+  </description>
+  <author>hendrik</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/roscs</url>
+  <depend package="rosbuild"/>
+  <depend package="roscpp" />
+  <rosdep name="mono" />
+
+  <export>
+   <rosbuild cmake_directory="${prefix}/cmake"/>
+    <cpp cflags="-I${prefix}/include"/>
+   <cs bpath="${prefix}/bin" />
+  </export>
+</package>
+
+
