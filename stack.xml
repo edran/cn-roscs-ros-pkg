@@ -1,0 +1,10 @@
+<stack>
+  <description brief="cn-roscs-ros-pkg">cn-roscs-ros-pkg</description>
+  <author>Maintained by hendrik</author>
+  <license>BSD</license>  
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/cn-roscs-ros-pkg</url>
+  <depend stack="ros" /> <!-- rosbuild -->
+  <depend stack="ros_comm" /> <!-- roscpp -->
+
+</stack>
