@@ -1,0 +1,4 @@
+- git: {local-name: cn-roscs-ros-pkg, uri: "https://code.google.com/p/cn-roscs-ros-pkg/"}
+- git: {local-name: cn-util-ros-pkg, uri: "https://code.google.com/p/cn-util-ros-pkg/"}
+- git: {local-name: cn-alica-ros-pkg, uri: "https://code.google.com/p/cn-alica-ros-pkg/"}
+
