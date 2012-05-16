@@ -2,7 +2,7 @@
 \mainpage
 \htmlinclude manifest.html
 
-\b roscs is ... 
+\b roscs provides C# wrappers for some ROS functionality.
 
 <!-- 
 Provide an overview of your package.
@@ -10,6 +10,7 @@ Provide an overview of your package.
 
 
 \section codeapi Code API
+https://cn-roscs-ros-pkg.googlecode.com/git/roscs/apidoc/index.html
 
 <!--
 Provide links to specific auto-generated API documentation within your
