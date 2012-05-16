@@ -1,0 +1,1064 @@
+<html>
+  <head>
+    <title>RosCS.Node</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+      a { text-decoration: none }
+
+      div.SideBar {
+        padding-left: 1em;
+        padding-right: 1em;
+        right: 0;
+        float: right;
+        border: thin solid black;
+        background-color: #f2f2f2;
+      }
+    
+      .CollectionTitle { font-weight: bold }
+      .PageTitle { font-size: 150%; font-weight: bold }
+
+      .Summary { }
+      .Signature { }          
+      .Remarks { }
+      .Members { }
+      .Copyright { }
+      
+      .Section { font-size: 125%; font-weight: bold }
+      p.Summary {
+        margin-left: 1em;
+      }
+      .SectionBox { margin-left: 2em }
+      .NamespaceName { font-size: 105%; font-weight: bold }
+      .NamespaceSumary { }
+      .MemberName { font-size: 115%; font-weight: bold; margin-top: 1em }
+      .Subsection { font-size: 105%; font-weight: bold }
+      .SubsectionBox { margin-left: 2em; margin-bottom: 1em }
+
+      .CodeExampleTable { background-color: #f5f5dd; border: thin solid black; padding: .25em; }
+      
+      .TypesListing {
+        border-collapse: collapse;
+      }
+
+      td {
+        vertical-align: top;
+      }
+      th {
+        text-align: left;
+      }
+
+      .TypesListing td { 
+        margin: 0px;  
+        padding: .25em;
+        border: solid gray 1px;
+      }
+
+      .TypesListing th { 
+        margin: 0px;  
+        padding: .25em;
+        background-color: #f2f2f2;
+        border: solid gray 1px;
+      }
+
+      div.Footer {
+        border-top: 1px solid gray;
+        margin-top: 1.5em;
+        padding-top: 0.6em;
+        text-align: center;
+        color: gray;
+      }
+
+      span.NotEntered /* Documentation for this section has not yet been entered */ {
+        font-style: italic;
+        color: red;	
+      }
+
+      div.Header {
+        background: #B0C4DE;
+        border: double;
+        border-color: white;
+        border-width: 7px;
+        padding: 0.5em;
+      }
+
+      div.Header * {
+        font-size: smaller;
+      }
+
+      div.Note {
+      }
+
+      i.ParamRef {
+      }
+
+      i.subtitle {
+      }
+
+      ul.TypeMembersIndex {
+        text-align: left;
+        background: #F8F8F8;
+      }
+
+      ul.TypeMembersIndex li {
+        display: inline;
+        margin:  0.5em;
+      }
+
+      table.HeaderTable {
+      }
+
+      table.SignatureTable {
+      }
+
+      table.Documentation, table.Enumeration, table.TypeDocumentation {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      table.Documentation tr th, table.TypeMembers tr th, table.Enumeration tr th, table.TypeDocumentation tr th {
+        background: whitesmoke;
+        padding: 0.8em;
+        border: 1px solid gray;
+        text-align: left;
+        vertical-align: bottom;
+      }
+
+      table.Documentation tr td, table.TypeMembers tr td, table.Enumeration tr td, table.TypeDocumentation tr td {
+        padding: 0.5em;
+        border: 1px solid gray;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      table.TypeMembers {
+        border: 1px solid #C0C0C0;
+        width: 100%;
+      }
+
+      table.TypeMembers tr td {
+        background: #F8F8F8;
+        border: white;
+      }
+
+      table.Documentation {
+      }
+
+      table.TypeMembers {
+      }
+
+      div.CodeExample {
+        width: 100%;
+        border: 1px solid #DDDDDD;
+        background-color: #F8F8F8;
+      }
+
+      div.CodeExample p {
+        margin: 0.5em;
+        border-bottom: 1px solid #DDDDDD;
+      }
+
+      div.CodeExample div {
+        margin: 0.5em;
+      }
+
+      h4 {
+        margin-bottom: 0;
+      }
+
+      div.Signature {
+        border: 1px solid #C0C0C0;
+        background: #F2F2F2;
+        padding: 1em;
+      }
+    </style>
+    <script type="text/JavaScript">
+      function toggle_display (block) {
+        var w = document.getElementById (block);
+        var t = document.getElementById (block + ":toggle");
+        if (w.style.display == "none") {
+          w.style.display = "block";
+          t.innerHTML = "⊟";
+        } else {
+          w.style.display = "none";
+          t.innerHTML = "⊞";
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="CollectionTitle">
+      <a href="index.html">RosCS Namespace</a></div>
+    <div class="SideBar">
+      <p>
+        <a href="#T:RosCS.Node">Overview</a>
+      </p>
+      <p>
+        <a href="#T:RosCS.Node:Signature">Signature</a>
+      </p>
+      <p>
+        <a href="#T:RosCS.Node:Docs">Remarks</a>
+      </p>
+      <p>
+        <a href="#Members">Members</a>
+      </p>
+      <p>
+        <a href="#T:RosCS.Node:Members">Member Details</a>
+      </p>
+    </div>
+    <h1 class="PageTitle" id="T:RosCS.Node">Node  Class</h1>
+    <p class="Summary" id="T:RosCS.Node:Summary">
+      A Node represents a ROS NodeHandle.
+    </p>
+    <div id="T:RosCS.Node:Signature">
+      <h2>Syntax</h2>
+      <div class="Signature">public class  <b>Node</b></div>
+    </div>
+    <div class="Remarks" id="T:RosCS.Node:Docs">
+       <h2 class="Section" id="Members">Members</h2>
+      <div class="SectionBox" id="_Members">
+        <p>
+								See Also: Inherited members from
+								<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Object">object</a>.
+							</p>
+        <h2 class="Section">Public Constructors</h2>
+        <div class="SectionBox" id="Public Constructors">
+          <div class="SubsectionBox">
+            <table class="TypeMembers">
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <b>
+                      <a href="#C:RosCS.Node(System.String)">Node</a>
+                    </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>)</div>
+                </td>
+                <td>
+                 Constructs a new Node in the provided namespace.
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <h2 class="Section">Public Properties</h2>
+        <div class="SectionBox" id="Public Properties">
+          <div class="SubsectionBox">
+            <table class="TypeMembers">
+              <tr valign="top">
+                <td>[read-only]<div>static </div></td>
+                <td>
+                  <b>
+                    <a href="#P:RosCS.Node.MainNode">MainNode</a>
+                  </b>
+                </td>
+                <td>The main NodeHandle,
+                  <i>
+                    <a href="../RosCS/Node.html">Node</a>
+                  </i>. Typically, only the MainNode is used by a program.</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <h2 class="Section">Public Methods</h2>
+        <div class="SectionBox" id="Public Methods">
+          <div class="SubsectionBox">
+            <table class="TypeMembers">
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:RosCS.Node.Advertise(System.String,System.UInt64,System.Int32)">Advertise</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.UInt64">ulong</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>)<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.IntPtr">IntPtr</a></nobr><blockquote>Advertises a topic. This method is also wrapped by the constructor of the <a href="Publisher.html">Publisher</a> class.</td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:RosCS.Node.Close">Close</a>
+                  </b>()<blockquote>Closes this NodeHandle</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:RosCS.Node.DeleteParam(System.String)">DeleteParam</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>)<blockquote>Deletes a parameter from the parameter server.</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:RosCS.Node.Finalize">Finalize</a>
+                  </b>()<blockquote>Internal finalizer.</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:RosCS.Node.GetParam(System.String)">GetParam</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>)<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a></nobr><blockquote>Get a parameter from the parameter server as string.</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:RosCS.Node.GetTypedParam``1(System.String)">GetTypedParam&lt;T&gt;</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>)<nobr> : <i title="To be added.">T</i></nobr><blockquote>Get a typed parameter from the parameter server.</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:RosCS.Node.HasParam(System.String)">HasParam</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>)<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a></nobr><blockquote>
+Checks for the existence of a parameter.</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:RosCS.Node.Ok">Ok</a>
+                  </b>()<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a></nobr><blockquote>Wraps NodeHandle::Ok()</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:RosCS.Node.RosDebug(System.String)">RosDebug</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>)<blockquote>Sends a debug message</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:RosCS.Node.RosError(System.String)">RosError</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>)<blockquote>Sends an error message</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:RosCS.Node.RosFatal(System.String)">RosFatal</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>)<blockquote>Sends a fatal message.</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:RosCS.Node.RosInfo(System.String)">RosInfo</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>)<blockquote>Sends an info message.</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:RosCS.Node.RosWarn(System.String)">RosWarn</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>)<blockquote>Sends a warning message.</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:RosCS.Node.SearchParam(System.String)">SearchParam</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>)<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a></nobr><blockquote>Search up the tree for a parameter</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:RosCS.Node.Send(System.IntPtr,RosCS.Message)">Send</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.IntPtr">IntPtr</a>, <a href="javascript:alert(&quot;Documentation not found.&quot;)">Message</a>)<blockquote>Sends a message, typically wrapped the Send method of the <a href="Publisher.html">Publisher</a> class.</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:RosCS.Node.SetParam(System.String,System.Boolean)">SetParam</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a>)<blockquote>Sets a boolean parameter.</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:RosCS.Node.SetParam(System.String,System.Double)">SetParam</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Double">double</a>)<blockquote>Sets a double parameter.</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:RosCS.Node.SetParam(System.String,System.Int32)">SetParam</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>)<blockquote>Sets an integer parameter.</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:RosCS.Node.SetParam(System.String,System.String)">SetParam</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>)<blockquote>Sets a string parameter</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:RosCS.Node.Subscribe(System.String,void delegate(Message))">Subscribe</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>,void delegate(Message))<blockquote>Subscribe to a topic.</blockquote></td>
+              </tr>
+            
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:RosCS.Node.Subscribe(System.String,void delegate(Message),System.Int32)">Subscribe</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>, void delegate(Message), <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>)<blockquote>Subscribe to a topic and provide a queue length.</blockquote></td>
+              </tr>
+           
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:RosCS.Node.UnSubscribe(System.String,void delegate(Message))">UnSubscribe</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>, void delegate(Message))<blockquote>Unsubscribe from a topic.</blockquote></td>
+              </tr>
+              
+            </table>
+          </div>
+        </div>
+    
+        
+    <div class="Members" id="T:RosCS.Node:Members">
+      <h2 class="Section" id="MemberDetails">Member Details</h2>
+      <div class="SectionBox" id="_MemberDetails">        
+        <h3 id="C:RosCS.Node(System.String)">Node Constructor</h3>
+        <blockquote id="C:RosCS.Node(System.String):member">
+          <p class="Summary">
+           Constructs a new Node (and NodeHandle)
+          </p>
+          <h2>Syntax</h2>
+          <div class="Signature">public  <b>Node</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> name)</div>
+          <h4 class="Subsection">Parameters</h4>
+          <blockquote class="SubsectionBox" id="C:RosCS.Node(System.String):Parameters">
+            <dl>
+              <dt>
+                <i>name</i>
+              </dt>
+              <dd>
+               The sub-namespace of this Node.
+              </dd>
+            </dl>
+          </blockquote>         
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:RosCS.Node.Advertise(System.String,System.UInt64,System.Int32)">Advertise Method</h3>
+        <blockquote id="M:RosCS.Node.Advertise(System.String,System.UInt64,System.Int32):member">
+          <p class="Summary">
+           This method is typically not called directly. Use a <a href="Publisher.html">Publisher</a> object instead.
+          </p>
+          <h2>Syntax</h2>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.IntPtr">IntPtr</a> <b>Advertise</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> topic, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.UInt64">ulong</a> messageType, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> queueSize)</div>
+          <h4 class="Subsection">Parameters</h4>
+          <blockquote class="SubsectionBox" id="M:RosCS.Node.Advertise(System.String,System.UInt64,System.Int32):Parameters">
+            <dl>
+              <dt>
+                <i>topic</i>
+              </dt>
+              <dd>
+                The topic's name.
+              </dd>
+              <dt>
+                <i>messageType</i>
+              </dt>
+              <dd>
+               An identifier for the message type. Each message class has a static TypeId property that can be used.
+              </dd>
+              <dt>
+                <i>queueSize</i>
+              </dt>
+              <dd>
+               The size of the outgoing queue.
+              </dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">Returns</h4>
+          <blockquote class="SubsectionBox" id="M:RosCS.Node.Advertise(System.String,System.UInt64,System.Int32):Returns">
+           An IntPtr wrapping the ros::Publisher
+          </blockquote>         
+          <hr size="1" />
+        </blockquote>     
+        <h3 id="M:RosCS.Node.Close">Close Method</h3>
+        <blockquote id="M:RosCS.Node.Close:member">
+          <p class="Summary">
+            Closes this node and the associated NodeHandle.
+          </p>
+          <h2>Syntax</h2>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>Close</b> ()</div>          
+          <hr size="1" />
+        </blockquote>        
+        <h3 id="M:RosCS.Node.DeleteParam(System.String)">DeleteParam Method</h3>
+        <blockquote id="M:RosCS.Node.DeleteParam(System.String):member">
+          <p class="Summary">
+           Delete a parameter from the parameter server.
+          </p>
+          <h2>Syntax</h2>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>DeleteParam</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> key)</div>
+          <h4 class="Subsection">Parameters</h4>
+          <blockquote class="SubsectionBox" id="M:RosCS.Node.DeleteParam(System.String):Parameters">
+            <dl>
+              <dt>
+                <i>key</i>
+              </dt>
+              <dd>
+                The key of the parameter to be deleted.
+              </dd>
+            </dl>
+          </blockquote>          
+        </blockquote>        
+
+        <h3 id="M:RosCS.Node.GetParam(System.String)">GetParam Method</h3>
+        <blockquote id="M:RosCS.Node.GetParam(System.String):member">
+          <p class="Summary">
+            Gets a parameter from the parameter server.
+          </p>
+          <h2>Syntax</h2>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> <b>GetParam</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> key)</div>
+          <h4 class="Subsection">Parameters</h4>
+          <blockquote class="SubsectionBox" id="M:RosCS.Node.GetParam(System.String):Parameters">
+            <dl>
+              <dt>
+                <i>key</i>
+              </dt>
+              <dd>
+                The key of the parameter.
+              </dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">Returns</h4>
+          <blockquote class="SubsectionBox" id="M:RosCS.Node.GetParam(System.String):Returns">
+           The parameter as string.
+          </blockquote>          
+          <hr size="1" />
+        </blockquote>        
+        <h3 id="M:RosCS.Node.GetTypedParam``1(System.String)">GetTypedParam&lt;T&gt; Generic Method</h3>
+        <blockquote id="M:RosCS.Node.GetTypedParam``1(System.String):member">
+          <p class="Summary">
+           Get a parameter of a specific type.
+          </p>
+          <h2>Syntax</h2>
+          <div class="Signature">public <i title="To be added.">T</i> <b>GetTypedParam&lt;T&gt;</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> key)</div>
+          <h4 class="Subsection">Type Parameters</h4>
+          <blockquote class="SubsectionBox" id="M:RosCS.Node.GetTypedParam``1(System.String):Type Parameters">
+            <dl>
+              <dt>
+                <i>T</i>
+              </dt>
+              <dd>
+              	The type of the parameter requested.
+              </dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">Parameters</h4>
+          <blockquote class="SubsectionBox" id="M:RosCS.Node.GetTypedParam``1(System.String):Parameters">
+            <dl>
+              <dt>
+                <i>key</i>
+              </dt>
+              <dd>
+               The key of the parameter.
+              </dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">Returns</h4>
+          <blockquote class="SubsectionBox" id="M:RosCS.Node.GetTypedParam``1(System.String):Returns">
+           The value of the requested parameter.
+          </blockquote>         
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:RosCS.Node.HasParam(System.String)">HasParam Method</h3>
+        <blockquote id="M:RosCS.Node.HasParam(System.String):member">
+          <p class="Summary">
+           Checks whether a specific parameter exists.
+          </p>
+          <h2>Syntax</h2>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a> <b>HasParam</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> key)</div>
+          <h4 class="Subsection">Parameters</h4>
+          <blockquote class="SubsectionBox" id="M:RosCS.Node.HasParam(System.String):Parameters">
+            <dl>
+              <dt>
+                <i>key</i>
+              </dt>
+              <dd>
+               The key of the parameter.
+              </dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">Returns</h4>
+          <blockquote class="SubsectionBox" id="M:RosCS.Node.HasParam(System.String):Returns">
+            A bool indicating whether the parameter was found.
+          </blockquote>          
+          <hr size="1" />
+        </blockquote>
+        <h3 id="P:RosCS.Node.MainNode">MainNode Property</h3>
+        <blockquote id="P:RosCS.Node.MainNode:member">
+          <p class="Summary">
+           The most common way to access a ros::NodeHandle
+          </p>
+          <h2>Syntax</h2>
+          <div class="Signature">public static <a href="../RosCS/Node.html">Node</a> <b>MainNode</b>  { get; }</div>
+          <h4 class="Subsection">Value</h4>
+          <blockquote class="SubsectionBox" id="P:RosCS.Node.MainNode:Value">
+            The NodeHandle of the namespace that was given in RosSharp.Init.
+          </blockquote>         
+          <hr size="1" />
+        </blockquote>      
+        <h3 id="M:RosCS.Node.Ok">Ok Method</h3>
+        <blockquote id="M:RosCS.Node.Ok:member">
+          <p class="Summary">
+            Wraps NodeHandle::ok()
+          </p>
+          <h2>Syntax</h2>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a> <b>Ok</b> ()</div>
+          <h4 class="Subsection">Returns</h4>
+          <blockquote class="SubsectionBox" id="M:RosCS.Node.Ok:Returns">
+            Whether this Node is still working.
+          </blockquote>         
+          <hr size="1" />
+        </blockquote>       
+        <h3 id="M:RosCS.Node.RosDebug(System.String)">RosDebug Method</h3>
+        <blockquote id="M:RosCS.Node.RosDebug(System.String):member">
+          <p class="Summary">
+            Wraps a version of ROS_DEBUG.
+          </p>
+          <h2>Syntax</h2>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>RosDebug</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> str)</div>
+          <h4 class="Subsection">Parameters</h4>
+          <blockquote class="SubsectionBox" id="M:RosCS.Node.RosDebug(System.String):Parameters">
+            <dl>
+              <dt>
+                <i>str</i>
+              </dt>
+              <dd>
+               The debug message.
+              </dd>
+            </dl>
+          </blockquote>
+          <h2 class="Section">Remarks</h2>
+          <div class="SectionBox" id="M:RosCS.Node.RosDebug(System.String):Remarks">
+            Currently, this call maps to ROS_DEBUG_THROTTLE(5,"%s",str). This means that debug messages from this node are only sent every 5sec, since ROS identifies debug calls by line number.
+          </div>          
+          <hr size="1" />
+        </blockquote>       
+        <h3 id="M:RosCS.Node.RosError(System.String)">RosError Method</h3>
+        <blockquote id="M:RosCS.Node.RosError(System.String):member">
+          <p class="Summary">
+           Wraps a version of ROS_ERROR
+          </p>
+          <h2>Syntax</h2>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>RosError</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> str)</div>
+          <h4 class="Subsection">Parameters</h4>
+          <blockquote class="SubsectionBox" id="M:RosCS.Node.RosError(System.String):Parameters">
+            <dl>
+              <dt>
+                <i>str</i>
+              </dt>
+              <dd>
+                The error message.
+              </dd>
+            </dl>
+          </blockquote>
+          <h2 class="Section">Remarks</h2>
+          <div class="SectionBox" id="M:RosCS.Node.RosError(System.String):Remarks">
+           Currently, this call maps to ROS_ERROR_THROTTLE(1,"%s",str). This means that debug messages from this node are only sent every 1sec, since ROS identifies debug calls by line number.
+          </div>          
+          <hr size="1" />
+        </blockquote>        
+        <h3 id="M:RosCS.Node.RosFatal(System.String)">RosFatal Method</h3>
+        <blockquote id="M:RosCS.Node.RosFatal(System.String):member">
+          <p class="Summary">
+           Wraps a call to ROS_FATAL
+          </p>
+          <h2>Syntax</h2>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>RosFatal</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> str)</div>
+          <h4 class="Subsection">Parameters</h4>
+          <blockquote class="SubsectionBox" id="M:RosCS.Node.RosFatal(System.String):Parameters">
+            <dl>
+              <dt>
+                <i>str</i>
+              </dt>
+              <dd>
+                The error message.
+              </dd>
+            </dl>
+          </blockquote>
+         
+          <hr size="1" />
+        </blockquote>        
+        <h3 id="M:RosCS.Node.RosInfo(System.String)">RosInfo Method</h3>
+        <blockquote id="M:RosCS.Node.RosInfo(System.String):member">
+          <p class="Summary">
+            Wraps a version of ROS_INFO
+          </p>
+          <h2>Syntax</h2>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>RosInfo</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> str)</div>
+          <h4 class="Subsection">Parameters</h4>
+          <blockquote class="SubsectionBox" id="M:RosCS.Node.RosInfo(System.String):Parameters">
+            <dl>
+              <dt>
+                <i>str</i>
+              </dt>
+              <dd>
+                The info message.
+              </dd>
+            </dl>
+          </blockquote>
+          <h2 class="Section">Remarks</h2>
+          <div class="SectionBox" id="M:RosCS.Node.RosInfo(System.String):Remarks">
+            Currently, this call maps to ROS_INFO_THROTTLE(10,"%s",str). This means that debug messages from this node are only sent every 10sec, since ROS identifies debug calls by line number.
+          </div>          
+          <hr size="1" />
+        </blockquote>        
+        <h3 id="M:RosCS.Node.RosWarn(System.String)">RosWarn Method</h3>
+        <blockquote id="M:RosCS.Node.RosWarn(System.String):member">
+          <p class="Summary">
+            Wraps a version of ROS_WARN
+          </p>
+          <h2>Syntax</h2>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>RosWarn</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> str)</div>
+          <h4 class="Subsection">Parameters</h4>
+          <blockquote class="SubsectionBox" id="M:RosCS.Node.RosWarn(System.String):Parameters">
+            <dl>
+              <dt>
+                str
+              </dt>
+              <dd>
+                The warning to be sent.
+              </dd>
+            </dl>
+          </blockquote>
+          <h2 class="Section">Remarks</h2>
+          <div class="SectionBox" id="M:RosCS.Node.RosWarn(System.String):Remarks">
+            Currently, this call maps to ROS_WARN_THROTTLE(3,"%s",str). This means that warning messages from this node are only sent every 3sec, since ROS identifies debug calls by line number.
+          </div>          
+          <hr size="1" />
+        </blockquote>      
+        <h3 id="M:RosCS.Node.SearchParam(System.String)">SearchParam Method</h3>
+        <blockquote id="M:RosCS.Node.SearchParam(System.String):member">
+          <p class="Summary">
+            Search for a parameter up the tree.
+          </p>
+          <h2>Syntax</h2>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> <b>SearchParam</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> key)</div>
+          <h4 class="Subsection">Parameters</h4>
+          <blockquote class="SubsectionBox" id="M:RosCS.Node.SearchParam(System.String):Parameters">
+            <dl>
+              <dt>
+                <i>key</i>
+              </dt>
+              <dd>
+               The key to be searched for.
+              </dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">Returns</h4>
+          <blockquote class="SubsectionBox" id="M:RosCS.Node.SearchParam(System.String):Returns">
+            The string value of the parameter.
+          </blockquote>         
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:RosCS.Node.Send(System.IntPtr,RosCS.Message)">Send Method</h3>
+        <blockquote id="M:RosCS.Node.Send(System.IntPtr,RosCS.Message):member">
+          <p class="Summary">
+            Sends a message via the publisher identified by pub. Typically, this is only used internally. For more convenience, use the Send method of <a href="Publisher.html">Publisher</a>.
+          </p>
+          <h2>Syntax</h2>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>Send</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.IntPtr">IntPtr</a> pub, <a href="javascript:alert(&quot;Documentation not found.&quot;)">Message</a> msg)</div>
+          <h4 class="Subsection">Parameters</h4>
+          <blockquote class="SubsectionBox" id="M:RosCS.Node.Send(System.IntPtr,RosCS.Message):Parameters">
+            <dl>
+              <dt>
+                <i>pub</i>
+              </dt>
+              <dd>
+                The wrapped ros::Publisher.
+              </dd>
+              <dt>
+                <i>msg</i>
+              </dt>
+              <dd>
+               The Message to be sent.
+              </dd>
+            </dl>
+          </blockquote>
+	 <hr size="1" />
+        </blockquote>              
+        <h3 id="M:RosCS.Node.SetParam(System.String,System.Boolean)">SetParam Method</h3>
+        <blockquote id="M:RosCS.Node.SetParam(System.String,System.Boolean):member">
+          <p class="Summary">
+           Set a boolean parameter.
+          </p>
+          <h2>Syntax</h2>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>SetParam</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> key, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a> val)</div>
+          <h4 class="Subsection">Parameters</h4>
+          <blockquote class="SubsectionBox" id="M:RosCS.Node.SetParam(System.String,System.Boolean):Parameters">
+            <dl>
+              <dt>
+                <i>key</i>
+              </dt>
+              <dd>
+                The parameter's key.
+              </dd>
+              <dt>
+                <i>val</i>
+              </dt>
+              <dd>
+                The parameter's value.
+              </dd>
+            </dl>
+          </blockquote>         
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:RosCS.Node.SetParam(System.String,System.Double)">SetParam Method</h3>
+        <blockquote id="M:RosCS.Node.SetParam(System.String,System.Double):member">
+          <p class="Summary">
+           Set a double parameter.
+          </p>
+          <h2>Syntax</h2>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>SetParam</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> key, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Double">double</a> val)</div>
+          <h4 class="Subsection">Parameters</h4>
+          <blockquote class="SubsectionBox" id="M:RosCS.Node.SetParam(System.String,System.Double):Parameters">
+            <dl>
+              <dt>
+                <i>key</i>
+              </dt>
+              <dd>
+               The parameter's key.
+              </dd>
+              <dt>
+                <i>val</i>
+              </dt>
+              <dd>
+               The parameter's value.
+              </dd>
+            </dl>
+          </blockquote>         
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:RosCS.Node.SetParam(System.String,System.Int32)">SetParam Method</h3>
+        <blockquote id="M:RosCS.Node.SetParam(System.String,System.Int32):member">
+          <p class="Summary">
+           Set an integer parameter.
+          </p>
+          <h2>Syntax</h2>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>SetParam</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> key, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> val)</div>
+          <h4 class="Subsection">Parameters</h4>
+          <blockquote class="SubsectionBox" id="M:RosCS.Node.SetParam(System.String,System.Int32):Parameters">
+            <dl>
+              <dt>
+                <i>key</i>
+              </dt>
+              <dd>
+                The parameter's key.
+              </dd>
+              <dt>
+                <i>val</i>
+              </dt>
+              <dd>
+                The parameter's value.
+              </dd>
+            </dl>
+          </blockquote>         
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:RosCS.Node.SetParam(System.String,System.String)">SetParam Method</h3>
+        <blockquote id="M:RosCS.Node.SetParam(System.String,System.String):member">
+          <p class="Summary">
+            Set a string parameter.
+          </p>
+          <h2>Syntax</h2>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>SetParam</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> key, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> val)</div>
+          <h4 class="Subsection">Parameters</h4>
+          <blockquote class="SubsectionBox" id="M:RosCS.Node.SetParam(System.String,System.String):Parameters">
+            <dl>
+              <dt>
+                <i>key</i>
+              </dt>
+              <dd>
+                The parameter's key.
+              </dd>
+              <dt>
+                <i>val</i>
+              </dt>
+              <dd>
+                The parameter's value.
+              </dd>
+            </dl>
+          </blockquote>         
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:RosCS.Node.Subscribe(System.String,void delegate(Message))">Subscribe Method</h3>
+        <blockquote id="M:RosCS.Node.Subscribe(System.String,RosCS.OnBool):member">
+          <p class="Summary">
+            Subscribe to a topic.
+          </p>
+          <h2>Syntax</h2>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>Subscribe</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> topic, void delegate(Message) callback)</div>
+          <h4 class="Subsection">Parameters</h4>
+          <blockquote class="SubsectionBox" id="M:RosCS.Node.Subscribe(System.String,RosCS.OnBool):Parameters">
+            <dl>
+              <dt>
+                <i>topic</i>
+              </dt>
+              <dd>
+                The name of the topic.
+              </dd>
+              <dt>
+                <i>callback</i>
+              </dt>
+              <dd>
+                The callback method to be called upon reception of a message. The type of this callback determines the type of the message expected.
+              </dd>
+            </dl>
+          </blockquote>    
+	<h2 class="Section">Remarks</h2>
+          <div class="SectionBox" id="M:RosCS.Node.Subscribe(System.String,RosCS.OnBool):Remarks">
+            In the generated code, this method is overloaded for every type of message available.
+          </div>     
+	<hr size="1" />
+        </blockquote>             
+        <h3 id="M:RosCS.Node.Subscribe(System.String,void delegate(Message),System.Int32)">Subscribe Method</h3>
+        <blockquote id="M:RosCS.Node.Subscribe(System.String,RosCS.OnBool,System.Int32):member">
+          <p class="Summary">
+           Subscribe to a topic.
+          </p>
+          <h2>Syntax</h2>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>Subscribe</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> topic, void delegate(Message) callback, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> queueSize)</div>
+          <h4 class="Subsection">Parameters</h4>
+          <blockquote class="SubsectionBox" id="M:RosCS.Node.Subscribe(System.String,RosCS.OnBool,System.Int32):Parameters">
+            <dl>
+              <dt>
+                <i>topic</i>
+              </dt>
+              <dd>
+                The name of the topic.
+              </dd>
+              <dt>
+                <i>callback</i>
+              </dt>
+              <dd>
+                The callback method to be called upon reception of a message. The type of this callback determines the type of the message expected.
+              </dd>
+              <dt>
+                <i>queueSize</i>
+              </dt>
+              <dd>
+                The size of the recpetion buffer.
+              </dd>
+            </dl>
+          </blockquote>
+          <h2 class="Section">Remarks</h2>
+          <div class="SectionBox" id="M:RosCS.Node.Subscribe(System.String,RosCS.OnBool,System.Int32):Remarks">
+            In the generated code, this method is overloaded for every type of message available.
+          </div>         
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:RosCS.Node.UnSubscribe(System.String,void delegate(Message))">UnSubscribe Method</h3>
+        <blockquote id="M:RosCS.Node.UnSubscribe(System.String,RosCS.OnBool):member">
+          <p class="Summary">
+           Unsubscribe a specific callback. Multiple callbacks on one topic are handled internally in C#. Once the last callback is unsubscribe, the ros::Subscriber will be shutdown.
+          </p>
+          <h2>Syntax</h2>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>UnSubscribe</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> topic, void delegate(Message) callback)</div>
+          <h4 class="Subsection">Parameters</h4>
+          <blockquote class="SubsectionBox" id="M:RosCS.Node.UnSubscribe(System.String,RosCS.OnBool):Parameters">
+            <dl>
+              <dt>
+                <i>topic</i>
+              </dt>
+              <dd>
+               The topic to unsubscribe from.
+              </dd>
+              <dt>
+                <i>callback</i>
+              </dt>
+              <dd>
+              The callback to be unsubscribed.
+              </dd>
+            </dl>
+          </blockquote>         
+          <hr size="1" />
+        </blockquote>
+       
+      </div>
+    </div>
+    <hr size="1" />
+    <div class="Copyright">
+    </div>
+  </body>
+</html>
