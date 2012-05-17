@@ -420,7 +420,7 @@ namespace CSCodeGen
 						ret+= "void translate2Ros("+m.RosClassName+"& m, char** response) {\n";					
 						Message.PointersUsed.Clear();
 						Message.Mode = Message.GEN_CPP;
-						Message.PointersUsed.Add("int32","p");
+						//Message.PointersUsed.Add("int32","p");
 						//string decl = m.PointerDeclaration();
 						
 						ret+=m.PointerDeclaration("int32");

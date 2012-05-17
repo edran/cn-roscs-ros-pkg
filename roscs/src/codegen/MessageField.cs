@@ -159,6 +159,7 @@ namespace CSCodeGen
 		}
 		public string Ros2Char(string indirection,ref string ptrType,ref string ptrName,int depth) {
 			string ret = "";
+			string preface = indirection.Replace(".","_").Replace("[","_").Replace("]","_");
 			if (this.IsBaseType && !this.IsArrayType) {
 				if (this.atomicRosType == "string") {
 					//Length of string: int32_t
@@ -262,15 +263,16 @@ namespace CSCodeGen
 		}
 		public string Char2Ros(string indirection, ref string ptrType,ref string ptrName, int depth) {
 			string ret = "";
+			string preface = indirection.Replace(".","_").Replace("[","_").Replace("]","_");
 			if (this.IsBaseType && !this.IsArrayType) {
 				if (this.atomicRosType == "string") {
 					//Length of string: int32_t
 					ret += SetPointerTo("int32",ref ptrType, ref ptrName);
-					ret += "int len_"+this.OriginalRosName+depth+" = (*"+ptrName+");\n";					
+					ret += "int len_" + preface + "_" + this.OriginalRosName+depth+" = (*"+ptrName+");\n";					
 					ret += ptrName+"++;\n";
 					ret += SetPointerTo("char",ref ptrType, ref ptrName);
-					ret += indirection+this.OriginalRosName+ " = string("+ptrName+",len_"+this.OriginalRosName+depth+");\n";
-					ret += ptrName+"+= len_"+this.name+depth+";\n";
+					ret += indirection+this.OriginalRosName+ " = string("+ptrName+",len_"+ preface + "_"+this.OriginalRosName+depth+");\n";
+					ret += ptrName+"+= len_"+ preface + "_"+this.name+depth+";\n";
 
 				} else if (this.atomicRosType == "time") {
 					ret += SetPointerTo("uint32",ref ptrType, ref ptrName);
@@ -296,7 +298,7 @@ namespace CSCodeGen
 			}
 			if (this.IsFixedSizeArray) {
 				if (this.atomicRosType == "string") {
-					ret += "int len2_"+this.OriginalRosName+depth+";\n";
+					ret += "int len2_"+ preface + "_" + this.OriginalRosName+depth+";\n";
 				}
 				for(int i=0; i<this.ArraySize; i++) {
 					if (this.IsBaseType) {
@@ -305,8 +307,8 @@ namespace CSCodeGen
 							ret += "len2_"+this.OriginalRosName+depth+" = (*"+ptrName+");\n";					
 							ret += ptrName+"++;\n";
 							ret += SetPointerTo("char",ref ptrType, ref ptrName);
-							ret += indirection+this.OriginalRosName+ "["+i+"]= string("+ptrName+",len2_"+this.OriginalRosName+depth+");\n";						
-							ret += ptrName+" += len2_"+this.OriginalRosName+depth+";\n";							
+							ret += indirection+this.OriginalRosName+ "["+i+"]= string("+ptrName+",len2_"+ preface + "_" +this.OriginalRosName+depth+");\n";						
+							ret += ptrName+" += len2_"+ preface + "_"+this.OriginalRosName+depth+";\n";							
 						} else if (this.atomicRosType == "time") {
 							ret += SetPointerTo("uint32",ref ptrType, ref ptrName);
 							ret += indirection+this.OriginalRosName+ "["+i+"] = ros::Time(*"+ptrName+",*("+ptrName+"+1));\n";					
@@ -330,7 +332,7 @@ namespace CSCodeGen
 			}
 			//Array Length:
 			ret += SetPointerTo("int32",ref ptrType, ref ptrName);
-			string preface = indirection.Replace(".","_").Replace("[","_").Replace("]","_");
+			preface = indirection.Replace(".","_").Replace("[","_").Replace("]","_");
 			ret += "int len_"+preface+"_"+this.OriginalRosName+depth+" = (*"+ptrName+");\n";
 
 			ret += ptrName+"++;\n";
@@ -375,16 +377,17 @@ namespace CSCodeGen
 		}
 		public string FromByte(string indirection, ref string ptrType,ref string ptrName, int depth) {
 			string ret = "";
+			string preface = indirection.Replace(".","_").Replace("[","_").Replace("]","_");
 			if (this.IsBaseType && !this.IsArrayType) {
 				if (this.atomicRosType == "string") {
 					//Length of string: int32_t
 					ret += SetPointerTo("int32",ref ptrType, ref ptrName);
-					ret += "int len_"+this.name+depth+" = (*"+ptrName+");\n";
+					ret += "int len_" + preface + "_" + this.name+depth+" = (*"+ptrName+");\n";
 					//ret += "uint l"+depth+"= (*"+ptrName+");\n"; 
 					ret += ptrName+"++;\n";
 					ret += SetPointerTo("char",ref ptrType, ref ptrName);
-					ret += indirection+FirstLetterToUpper(this.name)+ " = new System.String("+ptrName+",0,len_"+this.name+depth+");\n";
-					ret += ptrName+"+= len_"+this.name+depth+";\n";
+					ret += indirection+FirstLetterToUpper(this.name)+ " = new System.String("+ptrName+",0,len_" + preface + "_" +this.name+depth+");\n";
+					ret += ptrName+"+= len_" + preface + "_" +this.name+depth+";\n";
 
 				} else if (this.atomicRosType == "time" || this.atomicRosType == "duration") {
 					ret += SetPointerTo("uint32",ref ptrType, ref ptrName);
@@ -446,7 +449,6 @@ namespace CSCodeGen
 			}
 			//Array Length:
 			ret += SetPointerTo("int32",ref ptrType, ref ptrName);
-			string preface = indirection.Replace(".","_").Replace("[","_").Replace("]","_");
 			ret += "int len_"+preface+"_"+this.name+depth+" = (*"+ptrName+");\n";
 			if (this.IsBaseType) {
 				ret += indirection+FirstLetterToUpper(this.name) +" = new List<"+baseTypeMapping[this.atomicRosType].A+">();\n";				
@@ -496,17 +498,17 @@ namespace CSCodeGen
 		}
 		public string ToByte(string indirection, ref string ptrType,ref string ptrName, int depth) {
 			string ret = "";	
-			
+			string preface = indirection.Replace(".","_").Replace("[","_").Replace("]","_");
 			if (this.IsBaseType && !this.IsArrayType) {
 				if (this.atomicRosType == "string") {					
 					ret += SetPointerTo("int32",ref ptrType, ref ptrName);
 					ret += "*"+ptrName+" = "+indirection+FirstLetterToUpper(this.name)+".Length;\n";
 					ret +=ptrName+"++;\n";
 					ret += SetPointerTo("char",ref ptrType, ref ptrName);					
-					ret += "byte[] str"+this.name+depth+" = AsciiEncoder.GetBytes("+indirection+FirstLetterToUpper(this.name)+");\n";
+					ret += "byte[] str"+ preface + "_" + this.name+depth+" = AsciiEncoder.GetBytes("+indirection+FirstLetterToUpper(this.name)+");\n";
 					//ret +="char[] str"+this.name+depth+" = "+indirection+FirstLetterToUpper(this.name)+".ToCharArray();\n";
-					ret +="for(int i"+this.name+depth+"=0; i"+this.name+depth+"< str"+this.name+depth+".Length; i"+this.name+depth+"++) {\n";
-					ret +="\t*"+ptrName+" = (sbyte)str"+this.name+depth+"[i"+this.name+depth+"];\n";
+					ret +="for(int i"+this.name+depth+"=0; i"+this.name+depth+"< str"+preface + "_" + this.name+depth+".Length; i"+this.name+depth+"++) {\n";
+					ret +="\t*"+ptrName+" = (sbyte)str"+preface + "_" + this.name+depth+"[i"+this.name+depth+"];\n";
 					ret +="\t"+ptrName+"++;\n";
 					ret += "}\n";
 					//ret += indirection+FirstLetterToUpper(this.name)+".CopyTo(0,"+ptrName+",0,"+indirection+FirstLetterToUpper(this.name)+".Length);\n";
@@ -535,7 +537,7 @@ namespace CSCodeGen
 			}
 			if (this.IsFixedSizeArray) {
 				if (this.atomicRosType == "string") {
-					ret += "byte[] str"+this.name+depth+";\n";
+					ret += "byte[] str"+ preface + "_" + this.name+depth+";\n";
 				}				
 				for(int i=0; i<this.ArraySize; i++) {
 					if (this.IsBaseType) {
@@ -544,8 +546,8 @@ namespace CSCodeGen
 							ret += "*"+ptrName+" = "+indirection+FirstLetterToUpper(this.name)+"["+i+"].Length;\n";
 							ret +=ptrName+"++;\n";
 							ret += SetPointerTo("char",ref ptrType, ref ptrName);											
-							ret += "str"+this.name+depth+" = AsciiEncoder.GetBytes("+indirection+FirstLetterToUpper(this.name)+"["+i+"]);\n";
-							ret +="for(int i"+this.name+depth+"=0; i"+this.name+depth+"< str"+this.name+depth+".Length; i"+this.name+depth+"++) {\n";
+							ret += "str"+ preface + "_" + this.name+depth+" = AsciiEncoder.GetBytes("+indirection+FirstLetterToUpper(this.name)+"["+i+"]);\n";
+							ret +="for(int i"+this.name+depth+"=0; i"+this.name+depth+"< str" + preface + "_" + this.name+depth+".Length; i"+this.name+depth+"++) {\n";
 							ret +="\t*"+ptrName+" = (sbyte)str"+this.name+depth+"[i"+this.name+depth+"];\n";
 							ret +="\t"+ptrName+"++;\n";
 							ret += "}\n";
@@ -575,7 +577,7 @@ namespace CSCodeGen
 			ret += ptrName+"++;\n";
 			//loop:
 			if (this.atomicRosType == "string") {
-				ret += "byte[] str"+this.name+depth+";\n";
+				ret += "byte[] str" + this.name+depth+";\n";
 			}
 			ret += PtrLoopFix(ref ptrType,ref ptrName,true);
 			//Dictionary<string,string> usedPointers = new Dictionary<string, string>(Message.PointersUsed);
@@ -585,8 +587,8 @@ namespace CSCodeGen
 						ret += "*"+ptrName+" = "+indirection+FirstLetterToUpper(this.name)+"[i"+depth+"].Length;\n";
 						ret +=ptrName+"++;\n";
 						ret += SetPointerTo("char",ref ptrType, ref ptrName);											
-						ret += "str"+this.name+depth+" = AsciiEncoder.GetBytes("+indirection+FirstLetterToUpper(this.name)+"[i"+depth+"]);\n";
-						ret +="for(int i"+this.name+depth+"=0; i"+this.name+depth+"< str"+this.name+depth+".Length; i"+this.name+depth+"++) {\n";
+						ret += "str" + this.name+depth+" = AsciiEncoder.GetBytes("+indirection+FirstLetterToUpper(this.name)+"[i"+depth+"]);\n";
+						ret +="for(int i"+this.name+depth+"=0; i"+this.name+depth+"< str" + this.name+depth+".Length; i"+this.name+depth+"++) {\n";
 						ret +="\t*"+ptrName+" = (sbyte)str"+this.name+depth+"[i"+this.name+depth+"];\n";
 						ret +="\t"+ptrName+"++;\n";
 						ret += "}\n";

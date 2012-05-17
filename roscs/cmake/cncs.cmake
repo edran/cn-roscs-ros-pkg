@@ -200,7 +200,7 @@ macro(rosbuild_gen_cs_srv)
 	rosbuild_invoke_rospack(roscs "csgenerate" bpath export --lang=cs --attrib=bpath)
 
 	execute_process(
-    		COMMAND mono ${csgenerate_bpath}/QueryDependencies.exe ${PROJECT_NAME}
+    		COMMAND ${csgenerate_bpath}/QueryDependencies.exe -s ${PROJECT_NAME}
 		OUTPUT_VARIABLE _srvFiles
     		ERROR_VARIABLE _err
 		RESULT_VARIABLE _failed
@@ -208,20 +208,20 @@ macro(rosbuild_gen_cs_srv)
 	)
 
 	SEPARATE_ARGUMENTS(_srvfiles)
-	rosbuild_invoke_rospack(${PROJECT_NAME} "csmsgbuild" deps depends1)
-	string(REGEX REPLACE "\n" ";" csmsgbuild_deps "${csmsgbuild_deps}")
+	rosbuild_invoke_rospack(${PROJECT_NAME} "cssrvbuild" deps depends1)
+	string(REGEX REPLACE "\n" ";" cssrvbuild_deps "${cssrvbuild_deps}")
 	SET(codeGenArgs)
-	FOREACH(it ${csmsgbuild_deps})
+	FOREACH(it ${cssrvbuild_deps})
 		SET(codeGenArgs "${codeGenArgs} ${it}/*")
 	ENDFOREACH(it)
 	SEPARATE_ARGUMENTS(codeGenArgs)
 
 	ADD_CUSTOM_COMMAND(
-	    OUTPUT ${PROJECT_SOURCE_DIR}/srv_cs_gen/cpp/roscs.cpp ${PROJECT_SOURCE_DIR}/srv_cs_gen/csharp/Service.cs ${PROJECT_SOURCE_DIR}/srv_cs_gen/csharp/ServiceClient.cs ${PROJECT_SOURCE_DIR}/srv_cs_gen/csharp/AbstractService
-	    COMMAND mono ${csgenerate_bpath}/GenerateServices.exe
+	    OUTPUT ${PROJECT_SOURCE_DIR}/srv_cs_gen/cpp/roscs.cpp ${PROJECT_SOURCE_DIR}/srv_cs_gen/csharp/Service.cs ${PROJECT_SOURCE_DIR}/srv_cs_gen/csharp/ServiceClient.cs ${PROJECT_SOURCE_DIR}/srv_cs_gen/csharp/AbstractService.cs
+	    COMMAND ${csgenerate_bpath}/GenerateServices.exe
 	    ARGS  ${PROJECT_NAME} ${codeGenArgs}
 	    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-	    DEPENDS  ${_srvFiles}
+	    DEPENDS  ${_srvFiles} ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.Communication.dll
 	    COMMENT "Creating Csharp Wrapper Code"
 	)
 
@@ -230,34 +230,134 @@ macro(rosbuild_gen_cs_srv)
 	ADD_CUSTOM_COMMAND(
 		OUTPUT ${LIBRARY_OUTPUT_PATH}/RosCS.Services.dll ${LIBRARY_OUTPUT_PATH}/RosCS.Services.dll.mdb
 		COMMAND ${CMAKE_CSHARP_COMPILER}
-		ARGS -unsafe -debug+ -optimize+ -target:library -r:Mono.Posix.dll -r:${LIBRARY_OUTPUT_PATH}/RosCS.Messages.dll -out:${LIBRARY_OUTPUT_PATH}/RosCS.Services.dll  ${PROJECT_SOURCE_DIR}/srv_cs_gen/csharp/AbstractService.cs
+		ARGS -unsafe -debug+ -optimize+ -target:library -r:Mono.Posix.dll -r:${LIBRARY_OUTPUT_PATH}/RosCS.Messages.dll -out:${LIBRARY_OUTPUT_PATH}/RosCS.Services.dll ${PROJECT_SOURCE_DIR}/srv_cs_gen/csharp/AbstractService.cs
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}		    
 		DEPENDS ${PROJECT_SOURCE_DIR}/srv_cs_gen/csharp/AbstractService.cs ${LIBRARY_OUTPUT_PATH}/RosCS.Messages.dll
 		COMMENT "Creating Csharp RosCS.Services.dll"
 	)
 	SET("${PROJECT_NAME}_CSMESSAGE_DEPENDENCIES" "${${PROJECT_NAME}_CSMESSAGE_DEPENDENCIES} RosCS.Services")
 
-	IF(EXISTS "${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.Messages.dll")
-	SET(ServiceDep "-r:${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.Messages.dll")
-	ENDIF(EXISTS "${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.Messages.dll")
+	#build service lib for each dependency
+	SET(TMPSRVLINK "")
+	SET(TMPSRVDLLDEP "")
+	FOREACH(it ${cssrvbuild_deps})
+		FILE(GLOB "${it}_srvfiles" ${${it}_PACKAGE_PATH}/srv/*.srv)
+		MESSAGE("CHECKING BUILD ${it}.Services")
+# MESSAGE("var : ${${it}_srvfiles}")
+		IF(NOT ${it}_srvfiles STREQUAL "")
 
-	ADD_CUSTOM_COMMAND(
-		OUTPUT ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.Services.dll ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.Services.dll.mdb
-		COMMAND ${CMAKE_CSHARP_COMPILER}
-		ARGS -unsafe -debug+ -optimize+ -target:library -r:Mono.Posix.dll -r:${LIBRARY_OUTPUT_PATH}/RosCS.Messages.dll -r:${LIBRARY_OUTPUT_PATH}/RosCS.Services.dll ${ServiceDep} -out:${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.Services.dll ${PROJECT_SOURCE_DIR}/srv_cs_gen/csharp/${PROJECT_NAME}/*.cs
-		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}		    
-		DEPENDS ${LIBRARY_OUTPUT_PATH}/RosCS.Services.dll ${LIBRARY_OUTPUT_PATH}/RosCS.Messages.dll ${ServiceDep}
-		COMMENT "Creating Csharp ${PROJECT_NAME}.Services.dll"
-	)
-	SET(csharp_is_building_lib_${PROJECT_NAME}.Services 1)
-	SET("${PROJECT_NAME}_CSMESSAGE_DEPENDENCIES" "${${PROJECT_NAME}_CSMESSAGE_DEPENDENCIES} ${PROJECT_NAME}.Services")
-	
+			#build dependency to messages
+			rosbuild_invoke_rospack(${it} "csmsgdep" deps depends1)
+			string(REGEX REPLACE "\n" ";" csmsgdep_deps "${csmsgdep_deps}")
+			SET(TMPLINK "")
+			FOREACH(dd ${csmsgdep_deps})
+				SET(XFILEEXISTS)			
+				FILE(GLOB XFILEEXISTS ${${dd}_PACKAGE_PATH}/msg/*.msg)			
+				IF(NOT XFILEEXISTS STREQUAL "")
+				SET(TMPLINK "${TMPLINK} -r:${LIBRARY_OUTPUT_PATH}/${dd}.Messages.dll")
+				ENDIF(NOT XFILEEXISTS STREQUAL "")
+			ENDFOREACH(dd)
+
+			#hack because rosdep is broken in fuerte version (see https://code.ros.org/trac/ros/ticket/3956)
+			#link std_msgs
+			IF(NOT ${it} STREQUAL "std_msgs")
+				SET(TMPLINK "${TMPLINK} -r:${LIBRARY_OUTPUT_PATH}/std_msgs.Messages.dll")
+				SET(TMPDLLDEP "${TMPDLLDEP} ${LIBRARY_OUTPUT_PATH}/std_msgs.Messages.dll")
+			ENDIF(NOT ${it} STREQUAL "std_msgs")
+			#link geometry_msgs
+			IF(${it} STREQUAL "sensor_msgs")
+				SET(TMPLINK "${TMPLINK} -r:${LIBRARY_OUTPUT_PATH}/geometry_msgs.Messages.dll")
+				SET(TMPDLLDEP "${TMPDLLDEP} ${LIBRARY_OUTPUT_PATH}/geometry_msgs.Messages.dll")
+			ENDIF(${it} STREQUAL "sensor_msgs")
+			#link nav_msgs
+			IF(${it} STREQUAL "nav_msgs")
+				SET(TMPLINK "${TMPLINK} -r:${LIBRARY_OUTPUT_PATH}/geometry_msgs.Messages.dll")
+				SET(TMPDLLDEP "${TMPDLLDEP} ${LIBRARY_OUTPUT_PATH}/geometry_msgs.Messages.dll")
+			ENDIF(${it} STREQUAL "nav_msgs")
+			#link visualization_msgs
+			IF(${it} STREQUAL "visualization_msgs")
+				SET(TMPLINK "${TMPLINK} -r:${LIBRARY_OUTPUT_PATH}/geometry_msgs.Messages.dll")
+				SET(TMPDLLDEP "${TMPDLLDEP} ${LIBRARY_OUTPUT_PATH}/geometry_msgs.Messages.dll")
+			ENDIF(${it} STREQUAL "visualization_msgs")
+
+			MESSAGE("SHOULD BUILD ${it}.Services")
+			SEPARATE_ARGUMENTS(TMPLINK)
+			ADD_CUSTOM_COMMAND(
+				OUTPUT ${LIBRARY_OUTPUT_PATH}/${it}.Services.dll ${LIBRARY_OUTPUT_PATH}/${it}.Services.dll.mdb
+				COMMAND ${CMAKE_CSHARP_COMPILER}
+				ARGS -unsafe -debug+ -optimize+ -target:library -r:Mono.Posix.dll -r:${LIBRARY_OUTPUT_PATH}/RosCS.Messages.dll -r:${LIBRARY_OUTPUT_PATH}/RosCS.Services.dll -r:${LIBRARY_OUTPUT_PATH}/${it}.Messages.dll ${TMPLINK} -out:${LIBRARY_OUTPUT_PATH}/${it}.Services.dll ${PROJECT_SOURCE_DIR}/srv_cs_gen/csharp/${it}/*.cs
+ 				WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+				DEPENDS ${LIBRARY_OUTPUT_PATH}/RosCS.Services.dll ${LIBRARY_OUTPUT_PATH}/RosCS.Messages.dll ${LIBRARY_OUTPUT_PATH}/${it}.Messages.dll
+				COMMENT "Creating Csharp ${it}.Services.dll"
+			)
+			SET(TMPSRVLINK "${TMPSRVLINK} -r:${LIBRARY_OUTPUT_PATH}/${it}.Services.dll")
+			SET(TMPSRVDLLDEP "${TMPSRVDLLDEP} ${LIBRARY_OUTPUT_PATH}/${it}.Services.dll")
+			SET(csharp_is_building_lib_${it}.Services 1)
+			SET("${PROJECT_NAME}_CSMESSAGE_DEPENDENCIES" "${${PROJECT_NAME}_CSMESSAGE_DEPENDENCIES} ${it}.Services")
+		ENDIF(NOT ${it}_srvfiles STREQUAL "")
+	ENDFOREACH(it)	
+
+# MESSAGE("var : ${${PROJECT_NAME}_srvfiles}")
+	FILE(GLOB "${PROJECT_NAME}_srvfiles" ${${it}_PACKAGE_PATH}/srv/*.srv)
+	IF(NOT ${PROJECT_NAME}_srvfiles STREQUAL "")
+#build dependency to messages
+		rosbuild_invoke_rospack(${PROJECT_NAME} "csmsgdep" deps depends1)
+		string(REGEX REPLACE "\n" ";" csmsgdep_deps "${csmsgdep_deps}")
+		SET(TMPLINK "")
+		SET(csmsgdep_deps "${csmsgdep_deps} ${PROJECT_NAME}")
+		FOREACH(dd ${csmsgdep_deps})
+			SET(XFILEEXISTS)			
+			FILE(GLOB XFILEEXISTS ${${dd}_PACKAGE_PATH}/msg/*.msg)			
+			IF(NOT XFILEEXISTS STREQUAL "")
+			SET(TMPLINK "${TMPLINK} -r:${LIBRARY_OUTPUT_PATH}/${dd}.Messages.dll")
+			ENDIF(NOT XFILEEXISTS STREQUAL "")
+		ENDFOREACH(dd)
+
+		#hack
+		#link std_msgs
+		IF(NOT ${PROJECT_NAME}_srvfiles STREQUAL "std_msgs")
+			SET(TMPLINK "${TMPLINK} -r:${LIBRARY_OUTPUT_PATH}/std_msgs.Messages.dll")
+			SET(TMPDLLDEP "${TMPDLLDEP} ${LIBRARY_OUTPUT_PATH}/std_msgs.Messages.dll")
+		ENDIF(NOT ${PROJECT_NAME}_srvfiles STREQUAL "std_msgs")
+		#link geometry_msgs
+		IF(${PROJECT_NAME}_srvfiles STREQUAL "sensor_msgs")
+			SET(TMPLINK "${TMPLINK} -r:${LIBRARY_OUTPUT_PATH}/geometry_msgs.Messages.dll")
+			SET(TMPDLLDEP "${TMPDLLDEP} ${LIBRARY_OUTPUT_PATH}/geometry_msgs.Messages.dll")
+		ENDIF(${PROJECT_NAME}_srvfiles STREQUAL "sensor_msgs")
+		#link nav_msgs
+		IF(${PROJECT_NAME}_srvfiles STREQUAL "nav_msgs")
+			SET(TMPLINK "${TMPLINK} -r:${LIBRARY_OUTPUT_PATH}/geometry_msgs.Messages.dll")
+			SET(TMPDLLDEP "${TMPDLLDEP} ${LIBRARY_OUTPUT_PATH}/geometry_msgs.Messages.dll")
+		ENDIF(${PROJECT_NAME}_srvfiles STREQUAL "nav_msgs")
+		#link visualization_msgs
+		IF(${PROJECT_NAME}_srvfiles STREQUAL "visualization_msgs")
+			SET(TMPLINK "${TMPLINK} -r:${LIBRARY_OUTPUT_PATH}/geometry_msgs.Messages.dll")
+			SET(TMPDLLDEP "${TMPDLLDEP} ${LIBRARY_OUTPUT_PATH}/geometry_msgs.Messages.dll")
+		ENDIF(${PROJECT_NAME}_srvfiles STREQUAL "visualization_msgs")
+		MESSAGE("SHOULD BUILD ${PROJECT_NAME}.Services")
+		SEPARATE_ARGUMENTS(TMPLINK)
+		ADD_CUSTOM_COMMAND(
+			OUTPUT ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.Services.dll ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.Services.dll.mdb
+			COMMAND ${CMAKE_CSHARP_COMPILER}
+			ARGS -unsafe -debug+ -optimize+ -target:library -r:Mono.Posix.dll -r:${LIBRARY_OUTPUT_PATH}/RosCS.Messages.dll -r:${LIBRARY_OUTPUT_PATH}/RosCS.Services.dll ${TMPLINK} -out:${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.Services.dll ${PROJECT_SOURCE_DIR}/srv_cs_gen/csharp/${PROJECT_NAME}/*.cs
+			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}		    
+			DEPENDS ${LIBRARY_OUTPUT_PATH}/RosCS.Services.dll ${LIBRARY_OUTPUT_PATH}/RosCS.Messages.dll ${PROJECT_SOURCE_DIR}/srv_cs_gen/csharp/AbstractService.cs
+			COMMENT "Creating Csharp ${PROJECT_NAME}.Services.dll"
+		)
+		SET(TMPSRVLINK "${TMPSRVLINK} -r:${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.Services.dll")
+		SET(TMPSRVDLLDEP "${TMPSRVDLLDEP} ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.Services.dll")
+		SET(csharp_is_building_lib_${PROJECT_NAME}.Services 1)
+		SET("${PROJECT_NAME}_CSMESSAGE_DEPENDENCIES" "${${PROJECT_NAME}_CSMESSAGE_DEPENDENCIES} ${PROJECT_NAME}.Services")
+	ENDIF(NOT ${PROJECT_NAME}_srvfiles STREQUAL "")
+
+	SEPARATE_ARGUMENTS(TMPSRVDLLDEP)
+	SEPARATE_ARGUMENTS(TMPSRVLINK)
 	ADD_CUSTOM_COMMAND(
 	    OUTPUT ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.CommunicationServices.dll ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.CommunicationServices.dll.mdb
 	    COMMAND ${CMAKE_CSHARP_COMPILER}
-	    ARGS -unsafe -debug+ -optimize+ -target:library -r:Mono.Posix.dll -r:${LIBRARY_OUTPUT_PATH}/RosCS.Services.dll -r:${LIBRARY_OUTPUT_PATH}/RosCS.Messages.dll -r:${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.Services.dll -out:${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.CommunicationServices.dll  ${PROJECT_SOURCE_DIR}/srv_cs_gen/csharp/Service.cs ${PROJECT_SOURCE_DIR}/srv_cs_gen/csharp/ServiceClient.cs
+	    ARGS -unsafe -debug+ -optimize+ -target:library -r:Mono.Posix.dll -r:${LIBRARY_OUTPUT_PATH}/RosCS.Services.dll -r:${LIBRARY_OUTPUT_PATH}/RosCS.Messages.dll ${TMPSRVLINK} -out:${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.CommunicationServices.dll  ${PROJECT_SOURCE_DIR}/srv_cs_gen/csharp/Service.cs ${PROJECT_SOURCE_DIR}/srv_cs_gen/csharp/ServiceClient.cs
 	    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-	    DEPENDS ${LIBRARY_OUTPUT_PATH}/RosCS.Services.dll ${LIBRARY_OUTPUT_PATH}/RosCS.Messages.dll ${PROJECT_SOURCE_DIR}/srv_cs_gen/csharp/ServiceClient.cs ${PROJECT_SOURCE_DIR}/srv_cs_gen/csharp/Service.cs ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.Services.dll
+	    DEPENDS ${LIBRARY_OUTPUT_PATH}/RosCS.Services.dll ${LIBRARY_OUTPUT_PATH}/RosCS.Messages.dll ${PROJECT_SOURCE_DIR}/srv_cs_gen/csharp/ServiceClient.cs ${PROJECT_SOURCE_DIR}/srv_cs_gen/csharp/Service.cs ${PROJECT_SOURCE_DIR}/srv_cs_gen/csharp/AbstractService.cs ${TMPSRVDLLDEP}
 	    COMMENT "Creating RosSharp wrapper library"
 	  )
 	SET(csharp_is_building_lib_${PROJECT_NAME}.CommunicationServices 1)
@@ -273,7 +373,7 @@ macro(rosbuild_gen_cs_msg)
 	rosbuild_invoke_rospack(roscs "csgenerate" bpath export --lang=cs --attrib=bpath)
 
 	execute_process(
-    		COMMAND mono ${csgenerate_bpath}/QueryDependencies.exe ${PROJECT_NAME}
+    		COMMAND ${csgenerate_bpath}/QueryDependencies.exe ${PROJECT_NAME}
 		OUTPUT_VARIABLE _msgFiles
     		ERROR_VARIABLE _err
 		RESULT_VARIABLE _failed
@@ -290,7 +390,7 @@ macro(rosbuild_gen_cs_msg)
 
 	ADD_CUSTOM_COMMAND(
 	    OUTPUT ${PROJECT_SOURCE_DIR}/msg_cs_gen/cpp/roscs.cpp ${PROJECT_SOURCE_DIR}/msg_cs_gen/csharp/Message.cs ${PROJECT_SOURCE_DIR}/msg_cs_gen/csharp/Timer.cs ${PROJECT_SOURCE_DIR}/msg_cs_gen/csharp/RosSharp.cs ${PROJECT_SOURCE_DIR}/msg_cs_gen/csharp/Node.cs ${PROJECT_SOURCE_DIR}/msg_cs_gen/csharp/Publisher.cs
-	    COMMAND mono ${csgenerate_bpath}/GenerateCode.exe
+	    COMMAND ${csgenerate_bpath}/GenerateCode.exe
 	    ARGS  ${PROJECT_NAME} ${codeGenArgs}
 	    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 	    DEPENDS ${_msgFiles}
@@ -328,11 +428,28 @@ MESSAGE("Depends on packages: ${csmsgbuild_deps}")
 			SET(TMPDLLDEP "${TMPDLLDEP} ${LIBRARY_OUTPUT_PATH}/${dd}.Messages.dll")
 			ENDIF(NOT XFILEEXISTS STREQUAL "")
 		ENDFOREACH(dd)
+
+		#hack because rosdep is broken in fuerte version (see https://code.ros.org/trac/ros/ticket/3956)
 		#link std_msgs
 		IF(NOT ${it} STREQUAL "std_msgs")
 			SET(TMPLINK "${TMPLINK} -r:${LIBRARY_OUTPUT_PATH}/std_msgs.Messages.dll")
 			SET(TMPDLLDEP "${TMPDLLDEP} ${LIBRARY_OUTPUT_PATH}/std_msgs.Messages.dll")
 		ENDIF(NOT ${it} STREQUAL "std_msgs")
+		#link geometry_msgs
+		IF(${it} STREQUAL "sensor_msgs")
+			SET(TMPLINK "${TMPLINK} -r:${LIBRARY_OUTPUT_PATH}/geometry_msgs.Messages.dll")
+			SET(TMPDLLDEP "${TMPDLLDEP} ${LIBRARY_OUTPUT_PATH}/geometry_msgs.Messages.dll")
+		ENDIF(${it} STREQUAL "sensor_msgs")
+		#link nav_msgs
+		IF(${it} STREQUAL "nav_msgs")
+			SET(TMPLINK "${TMPLINK} -r:${LIBRARY_OUTPUT_PATH}/geometry_msgs.Messages.dll")
+			SET(TMPDLLDEP "${TMPDLLDEP} ${LIBRARY_OUTPUT_PATH}/geometry_msgs.Messages.dll")
+		ENDIF(${it} STREQUAL "nav_msgs")
+		#link visualization_msgs
+		IF(${it} STREQUAL "visualization_msgs")
+			SET(TMPLINK "${TMPLINK} -r:${LIBRARY_OUTPUT_PATH}/geometry_msgs.Messages.dll")
+			SET(TMPDLLDEP "${TMPDLLDEP} ${LIBRARY_OUTPUT_PATH}/geometry_msgs.Messages.dll")
+		ENDIF(${it} STREQUAL "visualization_msgs")
 		SEPARATE_ARGUMENTS(TMPLINK)
 		SEPARATE_ARGUMENTS(TMPDLLDEP)
 MESSAGE("${it} depends on packages: ${TMPDLLDEP}")
@@ -356,6 +473,11 @@ MESSAGE("SHOULD BUILD ${it}.Messages")
 	ENDFOREACH(it)
 	SET(TMPLINK "")
 	SET(TMPDLLDEP "")
+
+	#link std_msgs
+	SET(TMPLINK "${TMPLINK} -r:${LIBRARY_OUTPUT_PATH}/std_msgs.Messages.dll")
+	SET(TMPDLLDEP "${TMPDLLDEP} ${LIBRARY_OUTPUT_PATH}/std_msgs.Messages.dll")
+
 	FOREACH(dd ${csmsgbuild_deps})
 		FILE(GLOB XFILEEXISTS ${${dd}_PACKAGE_PATH}/msg/*.msg)			
 		IF(NOT XFILEEXISTS STREQUAL "")
@@ -370,7 +492,7 @@ MESSAGE("SHOULD BUILD ${it}.Messages")
 	ADD_CUSTOM_COMMAND(
 		OUTPUT ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.Messages.dll ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.Messages.dll.mdb
 		COMMAND ${CMAKE_CSHARP_COMPILER}
-		ARGS -unsafe -debug+ -optimize+ -target:library -r:Mono.Posix.dll -r:${LIBRARY_OUTPUT_PATH}/RosCS.Messages ${TMPLINK} -out:${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.Messages.dll  ${PROJECT_SOURCE_DIR}/msg_cs_gen/csharp/${PROJECT_NAME}/*.cs
+		ARGS -unsafe -debug+ -optimize+ -target:library -r:Mono.Posix.dll -r:${LIBRARY_OUTPUT_PATH}/RosCS.Messages.dll ${TMPLINK} -out:${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.Messages.dll  ${PROJECT_SOURCE_DIR}/msg_cs_gen/csharp/${PROJECT_NAME}/*.cs
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}		    
 		DEPENDS ${TMPDLLDEP} ${${PROJECT_NAME}_msgfiles} ${LIBRARY_OUTPUT_PATH}/RosCS.Messages.dll
 		COMMENT "Creating Csharp ${PROJECT_NAME}.Messages.dll"
@@ -387,7 +509,7 @@ MESSAGE("SHOULD BUILD ${it}.Messages")
 	ADD_CUSTOM_COMMAND(
 	    OUTPUT ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.Communication.dll ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.Communication.dll.mdb
 	    COMMAND ${CMAKE_CSHARP_COMPILER}
-	    ARGS -unsafe -debug+ -optimize+ -target:library -r:Mono.Posix.dll -r:${LIBRARY_OUTPUT_PATH}/RosCS.Messages ${TMPLINK} -out:${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.Communication.dll  ${PROJECT_SOURCE_DIR}/msg_cs_gen/csharp/Node.cs ${PROJECT_SOURCE_DIR}/msg_cs_gen/csharp/Timer.cs ${PROJECT_SOURCE_DIR}/msg_cs_gen/csharp/Publisher.cs ${PROJECT_SOURCE_DIR}/msg_cs_gen/csharp/RosSharp.cs
+	    ARGS -unsafe -debug+ -optimize+ -target:library -r:Mono.Posix.dll -r:${LIBRARY_OUTPUT_PATH}/RosCS.Messages.dll ${TMPLINK} -out:${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.Communication.dll  ${PROJECT_SOURCE_DIR}/msg_cs_gen/csharp/Node.cs ${PROJECT_SOURCE_DIR}/msg_cs_gen/csharp/Timer.cs ${PROJECT_SOURCE_DIR}/msg_cs_gen/csharp/Publisher.cs ${PROJECT_SOURCE_DIR}/msg_cs_gen/csharp/RosSharp.cs
 	    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 	    DEPENDS ${TMPDLLDEP} ${LIBRARY_OUTPUT_PATH}/RosCS.Messages.dll ${PROJECT_SOURCE_DIR}/msg_cs_gen/csharp/RosSharp.cs ${PROJECT_SOURCE_DIR}/msg_cs_gen/csharp/Timer.cs ${PROJECT_SOURCE_DIR}/msg_cs_gen/csharp/Node.cs ${PROJECT_SOURCE_DIR}/msg_cs_gen/csharp/Publisher.cs
 	    COMMENT "Creating RosSharp wrapper library"
